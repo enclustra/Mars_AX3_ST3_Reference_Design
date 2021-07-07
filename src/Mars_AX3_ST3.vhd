@@ -59,8 +59,8 @@ entity Mars_AX3_ST3 is
     IO0_D19_N                      : inout   std_logic;
     IO0_D20_P                      : inout   std_logic;
     IO0_D21_N                      : inout   std_logic;
-    IO0_D22_P                      : inout   std_logic;
-    IO0_D23_N                      : inout   std_logic;
+    IO0_D22_MIPI_D0LP_P            : inout   std_logic;
+    IO0_D23_MIPI_D0LP_N            : inout   std_logic;
     IO0_CLK_N                      : inout   std_logic;
     IO0_CLK_P                      : inout   std_logic;
     
@@ -103,7 +103,7 @@ entity Mars_AX3_ST3 is
     DP_LANE1_P                     : inout   std_logic;
     
     -- HDMI
-    HDMI_CEC                       : inout   std_logic;
+    HDMI_CEC_WDI                   : inout   std_logic;
     HDMI_HPD                       : inout   std_logic;
     HDMI_D0_N                      : inout   std_logic;
     HDMI_D0_P                      : inout   std_logic;
@@ -114,10 +114,14 @@ entity Mars_AX3_ST3 is
     HDMI_CLK_N                     : inout   std_logic;
     HDMI_CLK_P                     : inout   std_logic;
     
-    -- I2C
+    -- I2C_PL
     I2C_INT_N                      : in      std_logic;
     I2C_SCL                        : inout   std_logic;
     I2C_SDA                        : inout   std_logic;
+    
+    -- I2C_USER
+    I2C_USER_SCL                   : inout   std_logic;
+    I2C_USER_SDA                   : inout   std_logic;
     
     -- IO_2
     IO2_D0_P                       : inout   std_logic;
@@ -192,10 +196,6 @@ entity Mars_AX3_ST3 is
     
     -- Rst_N
     Rst_N                          : in      std_logic;
-    
-    -- ST3_I2C
-    I2C_SCL_FPGA                   : inout   std_logic;
-    I2C_SDA_FPGA                   : inout   std_logic;
     
     -- ST3_LED
     GPIO0_LED0_N                   : out     std_logic;

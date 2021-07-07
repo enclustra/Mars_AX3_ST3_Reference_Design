@@ -44,18 +44,18 @@ set_property -dict {PACKAGE_PIN M4    IOSTANDARD LVCMOS18  } [get_ports {IO0_D8_
 set_property -dict {PACKAGE_PIN N4    IOSTANDARD LVCMOS18  } [get_ports {IO0_D9_N}]
 set_property -dict {PACKAGE_PIN L6    IOSTANDARD LVCMOS18  } [get_ports {IO0_D10_P}]
 set_property -dict {PACKAGE_PIN L5    IOSTANDARD LVCMOS18  } [get_ports {IO0_D11_N}]
-set_property -dict {PACKAGE_PIN P4    IOSTANDARD LVCMOS18  } [get_ports {IO0_D12_P}]
-set_property -dict {PACKAGE_PIN P3    IOSTANDARD LVCMOS18  } [get_ports {IO0_D13_N}]
+set_property -dict {PACKAGE_PIN M6    IOSTANDARD LVCMOS18  } [get_ports {IO0_D12_P}]
+set_property -dict {PACKAGE_PIN N6    IOSTANDARD LVCMOS18  } [get_ports {IO0_D13_N}]
 set_property -dict {PACKAGE_PIN L1    IOSTANDARD LVCMOS18  } [get_ports {IO0_D14_P}]
 set_property -dict {PACKAGE_PIN M1    IOSTANDARD LVCMOS18  } [get_ports {IO0_D15_N}]
-set_property -dict {PACKAGE_PIN N2    IOSTANDARD LVCMOS18  } [get_ports {IO0_D16_P}]
-set_property -dict {PACKAGE_PIN N1    IOSTANDARD LVCMOS18  } [get_ports {IO0_D17_N}]
+set_property -dict {PACKAGE_PIN M3    IOSTANDARD LVCMOS18  } [get_ports {IO0_D16_P}]
+set_property -dict {PACKAGE_PIN M2    IOSTANDARD LVCMOS18  } [get_ports {IO0_D17_N}]
 set_property -dict {PACKAGE_PIN U2    IOSTANDARD LVCMOS18  } [get_ports {IO0_D18_P}]
 set_property -dict {PACKAGE_PIN V2    IOSTANDARD LVCMOS18  } [get_ports {IO0_D19_N}]
 set_property -dict {PACKAGE_PIN V7    IOSTANDARD LVCMOS18  } [get_ports {IO0_D20_P}]
 set_property -dict {PACKAGE_PIN V6    IOSTANDARD LVCMOS18  } [get_ports {IO0_D21_N}]
-set_property -dict {PACKAGE_PIN M6    IOSTANDARD LVCMOS18  } [get_ports {IO0_D22_P}]
-set_property -dict {PACKAGE_PIN N6    IOSTANDARD LVCMOS18  } [get_ports {IO0_D23_N}]
+set_property -dict {PACKAGE_PIN P2    IOSTANDARD LVCMOS18  } [get_ports {IO0_D22_MIPI_D0LP_P}]
+set_property -dict {PACKAGE_PIN R2    IOSTANDARD LVCMOS18  } [get_ports {IO0_D23_MIPI_D0LP_N}]
 set_property -dict {PACKAGE_PIN P5    IOSTANDARD LVCMOS18  } [get_ports {IO0_CLK_N}]
 set_property -dict {PACKAGE_PIN N5    IOSTANDARD LVCMOS18  } [get_ports {IO0_CLK_P}]
 
@@ -88,7 +88,7 @@ set_property -dict {PACKAGE_PIN D4    IOSTANDARD LVCMOS18  } [get_ports {IO1_CLK
 set_property -dict {PACKAGE_PIN D5    IOSTANDARD LVCMOS18  } [get_ports {IO1_CLK_P}]
 
 # DP
-set_property -dict {PACKAGE_PIN K3    IOSTANDARD LVCMOS18  } [get_ports {DP_HPD}]
+set_property -dict {PACKAGE_PIN U6    IOSTANDARD LVCMOS18  } [get_ports {DP_HPD}]
 set_property -dict {PACKAGE_PIN V9    IOSTANDARD LVCMOS18  } [get_ports {DP_AUX_IN}]
 set_property -dict {PACKAGE_PIN U7    IOSTANDARD LVCMOS18  } [get_ports {DP_AUX_OE}]
 set_property -dict {PACKAGE_PIN U9    IOSTANDARD LVCMOS18  } [get_ports {DP_AUX_OUT}]
@@ -98,7 +98,7 @@ set_property -dict {PACKAGE_PIN A5    IOSTANDARD LVCMOS18  } [get_ports {DP_LANE
 set_property -dict {PACKAGE_PIN A6    IOSTANDARD LVCMOS18  } [get_ports {DP_LANE1_P}]
 
 # HDMI
-set_property -dict {PACKAGE_PIN U6    IOSTANDARD LVCMOS18  } [get_ports {HDMI_CEC}]
+set_property -dict {PACKAGE_PIN K3    IOSTANDARD LVCMOS18  } [get_ports {HDMI_CEC_WDI}]
 set_property -dict {PACKAGE_PIN L3    IOSTANDARD LVCMOS18  } [get_ports {HDMI_HPD}]
 set_property -dict {PACKAGE_PIN T1    IOSTANDARD LVCMOS18  } [get_ports {HDMI_D0_N}]
 set_property -dict {PACKAGE_PIN R1    IOSTANDARD LVCMOS18  } [get_ports {HDMI_D0_P}]
@@ -109,12 +109,16 @@ set_property -dict {PACKAGE_PIN U4    IOSTANDARD LVCMOS18  } [get_ports {HDMI_D2
 set_property -dict {PACKAGE_PIN R5    IOSTANDARD LVCMOS18  } [get_ports {HDMI_CLK_N}]
 set_property -dict {PACKAGE_PIN R6    IOSTANDARD LVCMOS18  } [get_ports {HDMI_CLK_P}]
 
-# I2C
+# I2C_PL
 set_property SLEW SLOW [get_ports I2C_SDA]
 set_property SLEW SLOW [get_ports I2C_SCL]
 set_property -dict {PACKAGE_PIN R17   IOSTANDARD LVCMOS18  } [get_ports {I2C_INT_N}]
 set_property -dict {PACKAGE_PIN N17   IOSTANDARD LVCMOS18  } [get_ports {I2C_SCL}]
 set_property -dict {PACKAGE_PIN P18   IOSTANDARD LVCMOS18  } [get_ports {I2C_SDA}]
+
+# I2C_USER
+set_property -dict {PACKAGE_PIN K5    IOSTANDARD LVCMOS18  } [get_ports {I2C_USER_SCL}]
+set_property -dict {PACKAGE_PIN L4    IOSTANDARD LVCMOS18  } [get_ports {I2C_USER_SDA}]
 
 # IO_2
 set_property -dict {PACKAGE_PIN H6    IOSTANDARD LVCMOS18  } [get_ports {IO2_D0_P}]
@@ -143,12 +147,12 @@ set_property -dict {PACKAGE_PIN L18   IOSTANDARD LVCMOS18  } [get_ports {LED2_N}
 set_property -dict {PACKAGE_PIN M18   IOSTANDARD LVCMOS18  } [get_ports {LED3_N}]
 
 # MIPI
-set_property -dict {PACKAGE_PIN M2    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D0_N}]
-set_property -dict {PACKAGE_PIN M3    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D0_P}]
-set_property -dict {PACKAGE_PIN R2    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D1_N}]
-set_property -dict {PACKAGE_PIN P2    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D1_P}]
-set_property -dict {PACKAGE_PIN T4    IOSTANDARD LVCMOS18  } [get_ports {MIPI_CLK_N}]
-set_property -dict {PACKAGE_PIN T5    IOSTANDARD LVCMOS18  } [get_ports {MIPI_CLK_P}]
+set_property -dict {PACKAGE_PIN T4    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D0_N}]
+set_property -dict {PACKAGE_PIN T5    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D0_P}]
+set_property -dict {PACKAGE_PIN N1    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D1_N}]
+set_property -dict {PACKAGE_PIN N2    IOSTANDARD LVCMOS18  } [get_ports {MIPI_D1_P}]
+set_property -dict {PACKAGE_PIN P3    IOSTANDARD LVCMOS18  } [get_ports {MIPI_CLK_N}]
+set_property -dict {PACKAGE_PIN P4    IOSTANDARD LVCMOS18  } [get_ports {MIPI_CLK_P}]
 
 # Oscillator
 create_clock -name Clk50_R -period 20.000 [get_ports CLK50_R]
@@ -244,10 +248,6 @@ set_property -dict {PACKAGE_PIN M14   IOSTANDARD LVCMOS18  } [get_ports {FLASH_H
 
 # Rst_N
 set_property -dict {PACKAGE_PIN N15   IOSTANDARD LVCMOS18  } [get_ports {Rst_N}]
-
-# ST3_I2C
-set_property -dict {PACKAGE_PIN K5    IOSTANDARD LVCMOS18  } [get_ports {I2C_SCL_FPGA}]
-set_property -dict {PACKAGE_PIN L4    IOSTANDARD LVCMOS18  } [get_ports {I2C_SDA_FPGA}]
 
 # ST3_LED
 set_property -dict {PACKAGE_PIN T11   IOSTANDARD LVCMOS18  } [get_ports {GPIO0_LED0_N}]
