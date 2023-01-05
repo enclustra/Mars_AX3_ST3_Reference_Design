@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------
--- Copyright (c) 2021 by Enclustra GmbH, Switzerland.
+-- Copyright (c) 2022 by Enclustra GmbH, Switzerland.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of
 -- this hardware, software, firmware, and associated documentation files (the
@@ -30,13 +30,10 @@ use ieee.numeric_std.all;
 -- entity declaration
 ---------------------------------------------------------------------------------------------------
 entity Mars_AX3_ST3 is
-  generic (
-    DDR3_ADDR_WIDTH : natural
-  );
   
   port (
     
-    -- Anios_0
+    -- Anios IO Connector 0
     IO0_D0_P                       : inout   std_logic;
     IO0_D1_N                       : inout   std_logic;
     IO0_D2_P                       : inout   std_logic;
@@ -64,7 +61,7 @@ entity Mars_AX3_ST3 is
     IO0_CLK_N                      : inout   std_logic;
     IO0_CLK_P                      : inout   std_logic;
     
-    -- Anios_1
+    -- Anios IO Connector 1
     IO1_D0_P                       : inout   std_logic;
     IO1_D1_N                       : inout   std_logic;
     IO1_D2_P                       : inout   std_logic;
@@ -92,7 +89,11 @@ entity Mars_AX3_ST3 is
     IO1_CLK_N                      : inout   std_logic;
     IO1_CLK_P                      : inout   std_logic;
     
-    -- DP
+    -- 50 MHz Oscillator
+    CLK50_R                        : in      std_logic;
+    Clk50_DDR                      : in      std_logic;
+    
+    -- Display Port
     DP_HPD                         : in      std_logic;
     DP_AUX_IN                      : in      std_logic;
     DP_AUX_OE                      : out     std_logic;
@@ -104,26 +105,26 @@ entity Mars_AX3_ST3 is
     
     -- HDMI
     HDMI_CEC_WDI                   : inout   std_logic;
-    HDMI_HPD                       : inout   std_logic;
-    HDMI_D0_N                      : inout   std_logic;
-    HDMI_D0_P                      : inout   std_logic;
-    HDMI_D1_N                      : inout   std_logic;
-    HDMI_D1_P                      : inout   std_logic;
-    HDMI_D2_N                      : inout   std_logic;
-    HDMI_D2_P                      : inout   std_logic;
-    HDMI_CLK_N                     : inout   std_logic;
-    HDMI_CLK_P                     : inout   std_logic;
+    HDMI_HPD                       : in      std_logic;
+    HDMI_D0_N                      : out     std_logic;
+    HDMI_D0_P                      : out     std_logic;
+    HDMI_D1_N                      : out     std_logic;
+    HDMI_D1_P                      : out     std_logic;
+    HDMI_D2_N                      : out     std_logic;
+    HDMI_D2_P                      : out     std_logic;
+    HDMI_CLK_N                     : out     std_logic;
+    HDMI_CLK_P                     : out     std_logic;
     
-    -- I2C_PL
-    I2C_INT_N                      : in      std_logic;
-    I2C_SCL                        : inout   std_logic;
-    I2C_SDA                        : inout   std_logic;
+    -- I2C PL
+    I2C_MGMT_INT_N                 : in      std_logic;
+    I2C_MGMT_SCL                   : inout   std_logic;
+    I2C_MGMT_SDA                   : inout   std_logic;
     
-    -- I2C_USER
+    -- I2C User
     I2C_USER_SCL                   : inout   std_logic;
     I2C_USER_SDA                   : inout   std_logic;
     
-    -- IO_2
+    -- IO Connector 2
     IO2_D0_P                       : inout   std_logic;
     IO2_D1_N                       : inout   std_logic;
     IO2_D2_P                       : inout   std_logic;
@@ -133,7 +134,7 @@ entity Mars_AX3_ST3 is
     IO2_D6_P                       : inout   std_logic;
     IO2_D7_N                       : inout   std_logic;
     
-    -- IO_3
+    -- IO Connector 3
     IO3_D0_P                       : inout   std_logic;
     IO3_D1_N                       : inout   std_logic;
     IO3_D2_P                       : inout   std_logic;
@@ -153,11 +154,7 @@ entity Mars_AX3_ST3 is
     MIPI_CLK_N                     : inout   std_logic;
     MIPI_CLK_P                     : inout   std_logic;
     
-    -- Oscillator
-    CLK50_R                        : in      std_logic;
-    Clk50_DDR                      : in      std_logic;
-    
-    -- PL_DDR3_Memory
+    -- SDRAM
     DDR3_VSEL                      : inout   std_logic;
     DDR3_WE_N                      : out     std_logic;
     DDR3_CAS_N                     : out     std_logic;
@@ -174,7 +171,7 @@ entity Mars_AX3_ST3 is
     DDR3_DQS_N                     : inout   std_logic_vector(1 downto 0);
     DDR3_DQS_P                     : inout   std_logic_vector(1 downto 0);
     
-    -- PL_Gigabit_Ethernet
+    -- Gigabit Ethernet Interface
     ETH_MDC                        : out     std_logic;
     ETH_RXC                        : in      std_logic;
     ETH_TXC                        : out     std_logic;
@@ -197,7 +194,7 @@ entity Mars_AX3_ST3 is
     -- Rst_N
     Rst_N                          : in      std_logic;
     
-    -- ST3_LED
+    -- ST3 LED
     GPIO0_LED0_N                   : out     std_logic;
     GPIO1_LED1_N                   : out     std_logic;
     
@@ -211,7 +208,7 @@ entity Mars_AX3_ST3 is
     USBH_SSTX_N                    : inout   std_logic;
     USBH_SSTX_P                    : inout   std_logic;
     
-    -- User_Osc
+    -- User Oscillator
     OSC_N                          : in      std_logic;
     OSC_P                          : in      std_logic
   );
@@ -224,21 +221,27 @@ architecture rtl of Mars_AX3_ST3 is
   ---------------------------------------------------------------------------------------------------
   component Mars_AX3 is
     port (
-      IIC_sda_i           : in     std_logic;
-      IIC_sda_o           : out    std_logic;
-      IIC_sda_t           : out    std_logic;
-      IIC_scl_i           : in     std_logic;
-      IIC_scl_o           : out    std_logic;
-      IIC_scl_t           : out    std_logic;
-      LED_N               : out    std_logic_vector(3 downto 0);
       SYS_CLK             : in     std_logic;
+      IIC_USER_sda_i      : in     std_logic;
+      IIC_USER_sda_o      : out    std_logic;
+      IIC_USER_sda_t      : out    std_logic;
+      IIC_USER_scl_i      : in     std_logic;
+      IIC_USER_scl_o      : out    std_logic;
+      IIC_USER_scl_t      : out    std_logic;
+      IIC_MGMT_sda_i      : in     std_logic;
+      IIC_MGMT_sda_o      : out    std_logic;
+      IIC_MGMT_sda_t      : out    std_logic;
+      IIC_MGMT_scl_i      : in     std_logic;
+      IIC_MGMT_scl_o      : out    std_logic;
+      IIC_MGMT_scl_t      : out    std_logic;
+      LED_N               : out    std_logic_vector(3 downto 0);
       CLK50               : out    std_logic;
       CLK100              : out    std_logic;
       CLK200              : out    std_logic;
       DDR3_dq             : inout  std_logic_vector(15 downto 0);
       DDR3_dqs_p          : inout  std_logic_vector(1 downto 0);
       DDR3_dqs_n          : inout  std_logic_vector(1 downto 0);
-      DDR3_addr           : out    std_logic_vector(DDR3_ADDR_WIDTH-1 downto 0);
+      DDR3_addr           : out    std_logic_vector(13 downto 0);
       DDR3_ba             : out    std_logic_vector(2 downto 0);
       DDR3_ras_n          : out    std_logic;
       DDR3_cas_n          : out    std_logic;
@@ -283,23 +286,37 @@ architecture rtl of Mars_AX3_ST3 is
   end component Mars_AX3;
   
   component IOBUF is
-  port (
-  	I : in STD_LOGIC;
-  	O : out STD_LOGIC;
-  	T : in STD_LOGIC;
-  	IO : inout STD_LOGIC
-  );
+    port (
+      I : in STD_LOGIC;
+      O : out STD_LOGIC;
+      T : in STD_LOGIC;
+      IO : inout STD_LOGIC
+    );
   end component IOBUF;
+  
+  component OBUFDS is
+    port (
+      I : in STD_LOGIC;
+      O : out STD_LOGIC;
+      OB : out STD_LOGIC
+    );
+  end component OBUFDS;
 
   ---------------------------------------------------------------------------------------------------
   -- signal declarations
   ---------------------------------------------------------------------------------------------------
-  signal IIC_sda_i        : std_logic;
-  signal IIC_sda_o        : std_logic;
-  signal IIC_sda_t        : std_logic;
-  signal IIC_scl_i        : std_logic;
-  signal IIC_scl_o        : std_logic;
-  signal IIC_scl_t        : std_logic;
+  signal IIC_USER_sda_i   : std_logic;
+  signal IIC_USER_sda_o   : std_logic;
+  signal IIC_USER_sda_t   : std_logic;
+  signal IIC_USER_scl_i   : std_logic;
+  signal IIC_USER_scl_o   : std_logic;
+  signal IIC_USER_scl_t   : std_logic;
+  signal IIC_MGMT_sda_i   : std_logic;
+  signal IIC_MGMT_sda_o   : std_logic;
+  signal IIC_MGMT_sda_t   : std_logic;
+  signal IIC_MGMT_scl_i   : std_logic;
+  signal IIC_MGMT_scl_o   : std_logic;
+  signal IIC_MGMT_scl_t   : std_logic;
   signal LED_N            : std_logic_vector(3 downto 0);
   signal CLK50            : std_logic;
   signal CLK100           : std_logic;
@@ -338,21 +355,27 @@ begin
   ---------------------------------------------------------------------------------------------------
   Mars_AX3_i: component Mars_AX3
     port map (
-      IIC_sda_i            => IIC_sda_i,
-      IIC_sda_o            => IIC_sda_o,
-      IIC_sda_t            => IIC_sda_t,
-      IIC_scl_i            => IIC_scl_i,
-      IIC_scl_o            => IIC_scl_o,
-      IIC_scl_t            => IIC_scl_t,
-      LED_N                => LED_N,
       SYS_CLK              => Clk50_DDR,
+      IIC_USER_sda_i       => IIC_USER_sda_i,
+      IIC_USER_sda_o       => IIC_USER_sda_o,
+      IIC_USER_sda_t       => IIC_USER_sda_t,
+      IIC_USER_scl_i       => IIC_USER_scl_i,
+      IIC_USER_scl_o       => IIC_USER_scl_o,
+      IIC_USER_scl_t       => IIC_USER_scl_t,
+      IIC_MGMT_sda_i       => IIC_MGMT_sda_i,
+      IIC_MGMT_sda_o       => IIC_MGMT_sda_o,
+      IIC_MGMT_sda_t       => IIC_MGMT_sda_t,
+      IIC_MGMT_scl_i       => IIC_MGMT_scl_i,
+      IIC_MGMT_scl_o       => IIC_MGMT_scl_o,
+      IIC_MGMT_scl_t       => IIC_MGMT_scl_t,
+      LED_N                => LED_N,
       CLK50                => CLK50,
       CLK100               => CLK100,
       CLK200               => CLK200,
       DDR3_dq              => DDR3_DQ,
       DDR3_dqs_p           => DDR3_DQS_P,
       DDR3_dqs_n           => DDR3_DQS_N,
-      DDR3_addr            => DDR3_A (DDR3_ADDR_WIDTH-1 downto 0),
+      DDR3_addr            => DDR3_A,
       DDR3_ba              => DDR3_BA,
       DDR3_ras_n           => DDR3_RAS_N,
       DDR3_cas_n           => DDR3_CAS_N,
@@ -394,21 +417,66 @@ begin
       UART_txd             => UART_TX
     );
   
-  IIC_sda_iobuf: component IOBUF
-  	port map (
-  	I => IIC_sda_o,
-  	IO => I2C_SDA,
-  	O => IIC_sda_i,
-  	T => IIC_sda_t
+  hdmi_clock_buf: component OBUFDS
+    port map (
+      I => '0',
+      O => HDMI_CLK_P,
+      OB => HDMI_CLK_N
+    );
+  
+  hdmi_d0_buf: component OBUFDS
+    port map (
+      I => '0',
+      O => HDMI_D0_P,
+      OB => HDMI_D0_N
+    );
+  
+  hdmi_d1_buf: component OBUFDS
+    port map (
+      I => '0',
+      O => HDMI_D1_P,
+      OB => HDMI_D1_N
+    );
+  
+  hdmi_d2_buf: component OBUFDS
+    port map (
+      I => '0',
+      O => HDMI_D2_P,
+      OB => HDMI_D2_N
+    );
+  
+  IIC_USER_sda_iobuf: component IOBUF
+    port map (
+    I => IIC_USER_sda_o,
+    IO => I2C_USER_SDA,
+    O => IIC_USER_sda_i,
+    T => IIC_USER_sda_t
   );
   
-  IIC_scl_iobuf: component IOBUF
-  	port map (
-  	I => IIC_scl_o,
-  	IO => I2C_SCL,
-  	O => IIC_scl_i,
-  	T => IIC_scl_t
+  IIC_USER_scl_iobuf: component IOBUF
+    port map (
+    I => IIC_USER_scl_o,
+    IO => I2C_USER_SCL,
+    O => IIC_USER_scl_i,
+    T => IIC_USER_scl_t
   );
+  
+  IIC_MGMT_sda_iobuf: component IOBUF
+    port map (
+    I => IIC_MGMT_sda_o,
+    IO => I2C_MGMT_SDA,
+    O => IIC_MGMT_sda_i,
+    T => IIC_MGMT_sda_t
+  );
+  
+  IIC_MGMT_scl_iobuf: component IOBUF
+    port map (
+    I => IIC_MGMT_scl_o,
+    IO => I2C_MGMT_SCL,
+    O => IIC_MGMT_scl_i,
+    T => IIC_MGMT_scl_t
+  );
+  
   process (Clk50)
   begin
     if rising_edge (Clk50) then
@@ -423,15 +491,17 @@ begin
   LED1_N <= '0' when LED_N(0) = '0' else 'Z';
   LED2_N <= '0' when LED_N(1) = '0' else 'Z';
   LED3_N <= '0' when LED_N(2) = '0' else 'Z';
+  
   DDR3_VSEL <= 'Z'; -- assign to '0' for DDR3PL 1.35 V operation
   
   mdio_MDIO_iobuf: component IOBUF
-  	port map (
-  	I => MDIO_mdio_o,
-  	IO => ETH_MDIO,
-  	O => MDIO_mdio_i,
-  	T => MDIO_mdio_t
+      port map (
+      I => MDIO_mdio_o,
+      IO => ETH_MDIO,
+      O => MDIO_mdio_i,
+      T => MDIO_mdio_t
   );
+  
   
   QSPI_io0_iobuf: component IOBUF
   	port map (
@@ -440,37 +510,34 @@ begin
   	O => QSPI_io0_i,
   	T => QSPI_io0_t
   );
-  
   QSPI_io1_iobuf: component IOBUF
-  	port map (
-  	I => QSPI_io1_o,
-  	IO => FLASH_DO_FPGA_DIN,
-  	O => QSPI_io1_i,
-  	T => QSPI_io1_t
+      port map (
+      I => QSPI_io1_o,
+      IO => FLASH_DO_FPGA_DIN,
+      O => QSPI_io1_i,
+      T => QSPI_io1_t
   );
-  
   QSPI_io2_iobuf: component IOBUF
-  	port map (
-  	I => QSPI_io2_o,
-  	IO => FLASH_WP_N,
-  	O => QSPI_io2_i,
-  	T => QSPI_io2_t
+      port map (
+      I => QSPI_io2_o,
+      IO => FLASH_WP_N,
+      O => QSPI_io2_i,
+      T => QSPI_io2_t
   );
-  
   QSPI_io3_iobuf: component IOBUF
-  	port map (
-  	I => QSPI_io3_o,
-  	IO => FLASH_HOLD_N,
-  	O => QSPI_io3_i,
-  	T => QSPI_io3_t
+      port map (
+      I => QSPI_io3_o,
+      IO => FLASH_HOLD_N,
+      O => QSPI_io3_i,
+      T => QSPI_io3_t
   );
-  
   QSPI_ss_iobuf_0: component IOBUF
-  	port map (
-  	I => QSPI_ss_o,
-  	IO => FLASH_CS_N,
-  	O => QSPI_ss_i,
-  	T => QSPI_ss_t
+      port map (
+      I => QSPI_ss_o,
+      IO => FLASH_CS_N,
+      O => QSPI_ss_i,
+      T => QSPI_ss_t
   );
-
+  FLASH_CLK_FPGA_CCLK <= 'Z'; -- startup2 block is used
+  
 end rtl;
